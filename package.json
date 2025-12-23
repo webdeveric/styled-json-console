@@ -1,0 +1,98 @@
+{
+  "name": "@webdeveric/styled-console",
+  "description": "Custom Node.js Console that supports colored and styled JSON output",
+  "version": "0.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "keywords": [
+    "console",
+    "colors",
+    "json"
+  ],
+  "author": {
+    "email": "eric@webdeveric.com",
+    "name": "Eric King",
+    "url": "http://webdeveric.com/"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/createConsole.js",
+  "types": "./dist/createConsole.d.ts",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/createConsole.d.ts",
+      "import": "./dist/createConsole.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/webdeveric/console-colors.git"
+  },
+  "bugs": {
+    "url": "https://github.com/webdeveric/console-colors/issues"
+  },
+  "homepage": "https://github.com/webdeveric/console-colors/#readme",
+  "packageManager": "pnpm@10.26.2+sha512.0e308ff2005fc7410366f154f625f6631ab2b16b1d2e70238444dd6ae9d630a8482d92a451144debc492416896ed16f7b114a86ec68b8404b2443869e68ffda6",
+  "scripts": {
+    "clean": "rimraf ./dist/",
+    "prebuild": "pnpm clean",
+    "build": "tsc --build tsconfig.src.json --force",
+    "typecheck": "tsc --build tsconfig.src.json tsconfig.test.json --verbose",
+    "lint": "eslint ./*.{js,cjs,mjs,ts,cts,mts} ./src/ ./test/ --ext .ts,.mjs,.cjs",
+    "test": "vitest --typecheck",
+    "coverage": "vitest run --coverage --typecheck",
+    "validate": "validate-package-exports --check --verify",
+    "spellcheck": "cspell './{.github,src,test}/**/*.{ts,json}' './*.{md,mjs,mts}' './package.json' --no-progress",
+    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage && pnpm build && pnpm validate",
+    "format": "prettier --write ./*.{js,json,md} ./src/ ./test/",
+    "prepare": "husky"
+  },
+  "prettier": "@webdeveric/prettier-config",
+  "dependencies": {
+    "@webdeveric/utils": "^0.74.1"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^20.2.0",
+    "@commitlint/types": "^20.2.0",
+    "@types/node": "^22.19.3",
+    "@vitest/coverage-v8": "^4.0.16",
+    "@webdeveric/eslint-config-ts": "^0.11.0",
+    "@webdeveric/prettier-config": "^0.3.0",
+    "commitlint": "^20.2.0",
+    "commitlint-plugin-cspell": "^0.4.0",
+    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "cspell": "^9.4.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "jsdom": "^27.3.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "rimraf": "^6.1.2",
+    "semantic-release": "^25.0.2",
+    "typescript": "^5.9.3",
+    "validate-package-exports": "^0.14.0",
+    "vitest": "^4.0.16"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "unrs-resolver"
+    ]
+  }
+}

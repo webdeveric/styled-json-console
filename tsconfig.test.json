@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "tsBuildInfoFile": "./cache/test.tsbuildinfo"
+  },
+  "include": ["vitest.config.mts", "src/**/*.test.ts"],
+  "references": [{ "path": "./tsconfig.src.json" }]
+}

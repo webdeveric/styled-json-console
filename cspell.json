@@ -1,0 +1,7 @@
+{
+  "version": "0.2",
+  "language": "en-US",
+  "words": ["unrs-resolver", "webdeveric"],
+  "flagWords": [],
+  "ignorePaths": ["pnpm-lock.yaml", "node_modules", ".vscode"]
+}
