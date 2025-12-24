@@ -2,8 +2,26 @@ import { styleText, type StyleTextOptions } from 'node:util';
 
 import type { StyleTextFormat } from './types.js';
 
+export type StyleKeys =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'bracket'
+  | 'comma'
+  | 'colon'
+  | 'quoteKey'
+  | 'quoteString'
+  | 'key'
+  | 'null';
+
+export type StyleFn = (value: string, depth: number) => string;
+
+export type BaseStyle = {
+  [K in StyleKeys]: StyleFn;
+};
+
 export type StyleOptions = Record<
-  'string' | 'number' | 'boolean' | 'bracket' | 'comma' | 'colon' | 'quoteKey' | 'quoteString' | 'key' | 'null',
+  StyleKeys,
   [item: StyleTextFormat, ...rest: StyleTextFormat[]] // At least one item
 >;
 
@@ -27,23 +45,30 @@ const defaultStyleOptions: StyleOptions = {
   key: ['cyan'],
 };
 
-export class Style {
-  private readonly options: StyleOptions;
+export class Style implements BaseStyle {
+  readonly #options: StyleOptions;
 
-  private readonly styleTextOptions: StyleTextOptions = { validateStream: false };
+  readonly #styleTextOptions: StyleTextOptions = { validateStream: false };
 
   constructor(options?: Partial<StyleOptions>) {
-    this.options = { ...defaultStyleOptions, ...options };
+    this.#options = { ...defaultStyleOptions, ...options };
   }
 
   #getStyleTextFormat(type: keyof StyleOptions, depth: number): StyleTextFormat {
-    const formats = this.options[type];
+    const formats = this.#options[type];
 
     return formats[depth % formats.length]!; // Non-empty array, so the non-null assertion is safe
   }
 
   #style(type: keyof StyleOptions, value: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat(type, depth), value, this.styleTextOptions);
+    return styleText(this.#getStyleTextFormat(type, depth), value, this.#styleTextOptions);
+  }
+
+  /**
+   * Force bright (disable faint) ANSI code around the input string.
+   */
+  forceBright(input: string): string {
+    return `\x1b[22m${input}`; // `styleText()` does not provide this option
   }
 
   bracket(char: string, depth: number): string {
