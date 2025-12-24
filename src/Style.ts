@@ -1,4 +1,4 @@
-import { styleText } from 'node:util';
+import { styleText, type StyleTextOptions } from 'node:util';
 
 import type { StyleTextFormat } from './types.js';
 
@@ -30,6 +30,8 @@ const defaultStyleOptions: StyleOptions = {
 export class Style {
   private readonly options: StyleOptions;
 
+  private readonly styleTextOptions: StyleTextOptions = { validateStream: false };
+
   constructor(options?: Partial<StyleOptions>) {
     this.options = { ...defaultStyleOptions, ...options };
   }
@@ -40,45 +42,49 @@ export class Style {
     return (formats.length > 1 ? formats[depth % formats.length] : formats[0]) ?? 'blackBright';
   }
 
+  #style(type: keyof StyleOptions, value: string, depth: number): string {
+    return styleText(this.#getStyleTextFormat(type, depth), value, this.styleTextOptions);
+  }
+
   bracket(char: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('bracket', depth), char);
+    return this.#style('bracket', char, depth);
   }
 
   comma(char: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('comma', depth), char);
+    return this.#style('comma', char, depth);
   }
 
   colon(char: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('colon', depth), char);
+    return this.#style('colon', char, depth);
   }
 
   // quotes
   quoteKey(char: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('quoteKey', depth), char);
+    return this.#style('quoteKey', char, depth);
   }
 
   quoteString(char: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('quoteString', depth), char);
+    return this.#style('quoteString', char, depth);
   }
 
   // content
   key(value: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('key', depth), value);
+    return this.#style('key', value, depth);
   }
 
   string(value: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('string', depth), value);
+    return this.#style('string', value, depth);
   }
 
   number(value: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('number', depth), value);
+    return this.#style('number', value, depth);
   }
 
   boolean(value: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('boolean', depth), value);
+    return this.#style('boolean', value, depth);
   }
 
   null(value: string, depth: number): string {
-    return styleText(this.#getStyleTextFormat('null', depth), value);
+    return this.#style('null', value, depth);
   }
 }
