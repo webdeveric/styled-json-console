@@ -2,7 +2,7 @@ import { stripVTControlCharacters } from 'node:util';
 
 import { describe, it, expect } from 'vitest';
 
-import { ansiHighlightJson } from "./ansiHighlightJson.js";
+import { ansiHighlightJson } from './ansiHighlightJson.js';
 
 describe('ansiHighlightJson()', () => {
   it('colors a simple object', () => {
