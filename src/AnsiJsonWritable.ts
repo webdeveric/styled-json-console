@@ -4,13 +4,13 @@ import { isArray } from '@webdeveric/utils/predicate/isArray';
 import { isObject } from '@webdeveric/utils/predicate/isObject';
 
 import { ansiHighlightJson } from './ansiHighlightJson.js';
-import { isHighlightEnabled } from './isHighlightEnabled.js';
+import { isColorEnabled } from './isColorEnabled.js';
 import { Style, type StyleOptions } from './Style.js';
 
 import type { JsonReplacerFn } from './types.js';
 
 export type AnsiJsonWritableOptions = WritableOptions & {
-  output?: NodeJS.WriteStream;
+  output?: NodeJS.WritableStream;
   space?: number | string;
   eol?: string;
   replacer?: JsonReplacerFn;
@@ -20,7 +20,7 @@ export type AnsiJsonWritableOptions = WritableOptions & {
 export class AnsiJsonWritable extends Writable {
   readonly #buffer: string[] = [];
 
-  readonly #output: NodeJS.WriteStream;
+  readonly #output: NodeJS.WritableStream;
 
   readonly #space?: number | string;
 
@@ -29,6 +29,8 @@ export class AnsiJsonWritable extends Writable {
   readonly #eol: string;
 
   readonly #style: Style;
+
+  readonly #colorEnabled: boolean;
 
   constructor(options?: AnsiJsonWritableOptions) {
     const { output = process.stdout, space = 2, eol = '\n', replacer, styleOptions, ...rest } = options ?? {};
@@ -40,16 +42,11 @@ export class AnsiJsonWritable extends Writable {
     this.#replacer = replacer;
     this.#eol = eol;
     this.#style = new Style(styleOptions);
-  }
-
-  protected getWindowSize(): [columns: number, rows: number] {
-    const [columns, rows] = this.#output.getWindowSize();
-
-    return [columns, rows];
+    this.#colorEnabled = isColorEnabled();
   }
 
   protected colorize(text: string): string {
-    return this.#output.isTTY && isHighlightEnabled() ? ansiHighlightJson(text, this.#style) : text;
+    return this.#colorEnabled ? ansiHighlightJson(text, this.#style) : text;
   }
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -76,10 +73,6 @@ export class AnsiJsonWritable extends Writable {
       if (isObject(parsed) || isArray(parsed)) {
         output = this.colorize(JSON.stringify(parsed, this.#replacer, this.#space));
       }
-
-      // const [columns] = this.getWindowSize();
-
-      // this.#output.write('\n' + styleText(['bgBlackBright', 'blackBright'], '-'.repeat(columns)) + '\n');
 
       this.#output.write(output + this.#eol);
     }
