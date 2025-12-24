@@ -1,13 +1,12 @@
 import { Writable, type WritableOptions } from 'node:stream';
 
-import { isArray } from '@webdeveric/utils/predicate/isArray';
-import { isObject } from '@webdeveric/utils/predicate/isObject';
-
 import { ansiHighlightJson } from './ansiHighlightJson.js';
 import { isColorEnabled } from './isColorEnabled.js';
 import { Style, type StyleOptions } from './Style.js';
 
 import type { JsonReplacerFn } from './types.js';
+
+export type ModifyOutputFn = (output: string, style: Style) => string;
 
 export type AnsiJsonWritableOptions = WritableOptions & {
   output?: NodeJS.WritableStream;
@@ -15,6 +14,7 @@ export type AnsiJsonWritableOptions = WritableOptions & {
   eol?: string;
   replacer?: JsonReplacerFn;
   styleOptions?: Partial<StyleOptions>;
+  modifyOutput?: ModifyOutputFn;
 };
 
 export class AnsiJsonWritable extends Writable {
@@ -32,8 +32,18 @@ export class AnsiJsonWritable extends Writable {
 
   readonly #colorEnabled: boolean;
 
+  readonly #modifyOutput?: ModifyOutputFn;
+
   constructor(options?: AnsiJsonWritableOptions) {
-    const { output = process.stdout, space = 2, eol = '\n', replacer, styleOptions, ...rest } = options ?? {};
+    const {
+      output = process.stdout,
+      space = 2,
+      eol = '\n',
+      replacer,
+      styleOptions,
+      modifyOutput,
+      ...rest
+    } = options ?? {};
 
     super({ ...rest, decodeStrings: false });
 
@@ -43,9 +53,10 @@ export class AnsiJsonWritable extends Writable {
     this.#eol = eol;
     this.#style = new Style(styleOptions);
     this.#colorEnabled = isColorEnabled();
+    this.#modifyOutput = modifyOutput;
   }
 
-  protected colorize(text: string): string {
+  #colorize(text: string): string {
     return this.#colorEnabled ? ansiHighlightJson(text, this.#style) : text;
   }
 
@@ -70,8 +81,12 @@ export class AnsiJsonWritable extends Writable {
         return callback();
       }
 
-      if (isObject(parsed) || isArray(parsed)) {
-        output = this.colorize(JSON.stringify(parsed, this.#replacer, this.#space));
+      if (parsed !== null && typeof parsed === 'object') {
+        output = this.#colorize(JSON.stringify(parsed, this.#replacer, this.#space));
+
+        if (this.#modifyOutput) {
+          output = this.#modifyOutput(output, this.#style);
+        }
       }
 
       this.#output.write(output + this.#eol);

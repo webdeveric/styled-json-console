@@ -1,12 +1,13 @@
 import { Console, type ConsoleConstructorOptions } from 'node:console';
 
-import { AnsiJsonWritable } from './AnsiJsonWritable.js';
+import { AnsiJsonWritable, type ModifyOutputFn } from './AnsiJsonWritable.js';
 
 import type { StyleOptions } from './Style.js';
 import type { JsonReplacerFn } from './types.js';
 
 export type CreateConsoleOptions = ConsoleConstructorOptions & {
   eol?: string;
+  modifyOutput?: ModifyOutputFn;
   json?: {
     style?: Partial<StyleOptions>;
     space?: number | string;
@@ -15,7 +16,7 @@ export type CreateConsoleOptions = ConsoleConstructorOptions & {
 };
 
 export function createConsole(options: Partial<CreateConsoleOptions> = {}): Console {
-  const { stdout = process.stdout, stderr = process.stderr, eol, json, ...consoleOptions } = options;
+  const { stdout = process.stdout, stderr = process.stderr, eol, modifyOutput, json, ...consoleOptions } = options;
 
   return new Console({
     stdout: new AnsiJsonWritable({
@@ -23,6 +24,7 @@ export function createConsole(options: Partial<CreateConsoleOptions> = {}): Cons
       space: json?.space,
       replacer: json?.replacer,
       eol,
+      modifyOutput,
       styleOptions: json?.style,
     }),
     stderr: new AnsiJsonWritable({
@@ -30,6 +32,7 @@ export function createConsole(options: Partial<CreateConsoleOptions> = {}): Cons
       space: json?.space,
       replacer: json?.replacer,
       eol,
+      modifyOutput,
       styleOptions: json?.style,
     }),
     ...consoleOptions,
