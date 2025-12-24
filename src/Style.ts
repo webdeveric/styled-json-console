@@ -68,7 +68,7 @@ export class Style implements BaseStyle {
    * Force bright (disable faint) ANSI code around the input string.
    */
   forceBright(input: string): string {
-    return `\x1b[22m${input}`; // `styleText()` does not provide this option
+    return `\x1b[0m${input}`; // `styleText()` does not provide this option
   }
 
   bracket(char: string, depth: number): string {
