@@ -4,7 +4,7 @@ import type { StyleTextFormat } from './types.js';
 
 export type StyleOptions = Record<
   'string' | 'number' | 'boolean' | 'bracket' | 'comma' | 'colon' | 'quoteKey' | 'quoteString' | 'key' | 'null',
-  StyleTextFormat[]
+  [item: StyleTextFormat, ...rest: StyleTextFormat[]] // At least one item
 >;
 
 const defaultStyleOptions: StyleOptions = {
@@ -39,7 +39,7 @@ export class Style {
   #getStyleTextFormat(type: keyof StyleOptions, depth: number): StyleTextFormat {
     const formats = this.options[type];
 
-    return (formats.length > 1 ? formats[depth % formats.length] : formats[0]) ?? 'blackBright';
+    return formats[depth % formats.length]!; // Non-empty array, so the non-null assertion is safe
   }
 
   #style(type: keyof StyleOptions, value: string, depth: number): string {
