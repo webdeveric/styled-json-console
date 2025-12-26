@@ -25,21 +25,21 @@ export type StyleOptions = Record<
   [item: StyleTextFormat, ...rest: StyleTextFormat[]] // At least one item
 >;
 
-const defaultStyleOptions: StyleOptions = {
+export const defaultStyleOptions: StyleOptions = {
   // content
   string: ['green'],
-  number: ['yellow'],
-  boolean: ['magenta'],
-  null: ['gray'],
+  number: ['yellowBright'],
+  boolean: ['blueBright'],
+  null: ['redBright'],
 
   // structural
-  bracket: ['blue', 'yellow', ['white', 'bgBlack'], 'cyan', 'green', 'red'],
+  bracket: ['white', 'blue', 'yellow', 'cyan', 'green', 'red'],
   comma: ['white'],
   colon: ['white'],
 
   // quotes
-  quoteKey: ['gray'],
-  quoteString: ['gray'],
+  quoteKey: ['cyan'],
+  quoteString: ['green'],
 
   // keys
   key: ['cyan'],
