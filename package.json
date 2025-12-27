@@ -1,5 +1,5 @@
 {
-  "name": "json-console",
+  "name": "styled-json-console",
   "description": "Custom Node.js Console that styles your JSON output",
   "version": "0.0.0",
   "publishConfig": {
@@ -40,12 +40,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/webdeveric/json-console.git"
+    "url": "git+ssh://git@github.com/webdeveric/styled-json-console.git"
   },
   "bugs": {
-    "url": "https://github.com/webdeveric/json-console/issues"
+    "url": "https://github.com/webdeveric/styled-json-console/issues"
   },
-  "homepage": "https://github.com/webdeveric/json-console/#readme",
+  "homepage": "https://github.com/webdeveric/styled-json-console/#readme",
   "packageManager": "pnpm@10.26.2+sha512.0e308ff2005fc7410366f154f625f6631ab2b16b1d2e70238444dd6ae9d630a8482d92a451144debc492416896ed16f7b114a86ec68b8404b2443869e68ffda6",
   "scripts": {
     "clean": "rimraf ./dist/",

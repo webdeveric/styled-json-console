@@ -1,17 +1,17 @@
-# `json-console`
+# `styled-json-console`
 
 Create a custom Node.js [`Console`](https://nodejs.org/api/console.html#new-consoleoptions) that automatically adds colors to [`JSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON) strings.
 
 ## Install
 
 ```shell
-pnpm add json-console
+pnpm add styled-json-console
 ```
 
 ## Usage
 
 ```ts
-import { createConsole } from 'json-console';
+import { createConsole } from 'styled-json-console';
 
 const myConsole = createConsole({
   // Options go here

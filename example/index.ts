@@ -1,7 +1,7 @@
 import { randomInt } from 'node:crypto';
 import { styleText } from 'node:util';
 
-import { createConsole } from 'json-console';
+import { createConsole } from 'styled-json-console';
 
 const myConsole = createConsole({
   inspectOptions: {
