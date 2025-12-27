@@ -2,9 +2,9 @@ import { Writable, type WritableOptions } from 'node:stream';
 
 import { ansiHighlightJson } from './ansiHighlightJson.js';
 import { isColorEnabled } from './isColorEnabled.js';
-import { Style, type StyleOptions } from './Style.js';
+import { Style } from './Style.js';
 
-import type { JsonReplacerFn } from './types.js';
+import type { JsonReplacerFn, StyleOptions, StyleTextFormatArray } from './types.js';
 
 export type ModifyOutputFn = (output: string, style: Style) => string;
 
@@ -13,7 +13,7 @@ export type AnsiJsonWritableOptions = WritableOptions & {
   space?: number | string;
   eol?: string;
   replacer?: JsonReplacerFn;
-  styleOptions?: Partial<StyleOptions>;
+  styleOptions?: Partial<StyleOptions> | StyleTextFormatArray;
   modifyOutput?: ModifyOutputFn;
 };
 

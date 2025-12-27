@@ -31,11 +31,11 @@ jobs:
       - name: Installing dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Linting
-        run: pnpm lint
-
       - name: Type checking
         run: pnpm typecheck
+
+      - name: Linting
+        run: pnpm lint
 
       - name: Testing
         run: pnpm coverage

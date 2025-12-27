@@ -1,48 +1,14 @@
 import { styleText, type StyleTextOptions } from 'node:util';
 
-import type { StyleTextFormat } from './types.js';
+import { defaultStyleOptions } from './defaults.js';
+import { mergeStyleOptions } from './mergeStyleOptions.js';
 
-export type StyleKeys =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'bracket'
-  | 'comma'
-  | 'colon'
-  | 'quoteKey'
-  | 'quoteString'
-  | 'key'
-  | 'null';
+import type { StyleKey, StyleOptions, StyleTextFormat, StyleTextFormatArray } from './types.js';
 
 export type StyleFn = (value: string, depth: number) => string;
 
 export type BaseStyle = {
-  [K in StyleKeys]: StyleFn;
-};
-
-export type StyleOptions = Record<
-  StyleKeys,
-  [item: StyleTextFormat, ...rest: StyleTextFormat[]] // At least one item
->;
-
-export const defaultStyleOptions: StyleOptions = {
-  // content
-  string: ['green'],
-  number: ['yellowBright'],
-  boolean: ['blueBright'],
-  null: ['redBright'],
-
-  // structural
-  bracket: ['white', 'blue', 'yellow', 'cyan', 'green', 'red'],
-  comma: ['white'],
-  colon: ['white'],
-
-  // quotes
-  quoteKey: ['cyan'],
-  quoteString: ['green'],
-
-  // keys
-  key: ['cyan'],
+  [K in StyleKey]: StyleFn;
 };
 
 export class Style implements BaseStyle {
@@ -50,8 +16,8 @@ export class Style implements BaseStyle {
 
   readonly #styleTextOptions: StyleTextOptions = { validateStream: false };
 
-  constructor(options?: Partial<StyleOptions>) {
-    this.#options = { ...defaultStyleOptions, ...options };
+  constructor(options?: Partial<StyleOptions> | StyleTextFormatArray) {
+    this.#options = mergeStyleOptions(defaultStyleOptions, options);
   }
 
   #getStyleTextFormat(type: keyof StyleOptions, depth: number): StyleTextFormat {
