@@ -1,12 +1,12 @@
 import { Console, type ConsoleConstructorOptions } from 'node:console';
 
 import { AnsiJsonWritable, type ModifyOutputFn } from './AnsiJsonWritable.js';
+import { mergeStyleOptions } from './mergeStyleOptions.js';
 
-import type { StyleOptions } from './Style.js';
-import type { JsonReplacerFn } from './types.js';
+import type { JsonReplacerFn, StyleOptions, StyleTextFormatArray } from './types.js';
 
 export type JsonConsoleOptions = {
-  style?: Partial<StyleOptions>;
+  style?: Partial<StyleOptions> | StyleTextFormatArray;
   space?: number | string;
   replacer?: JsonReplacerFn;
 };
@@ -28,10 +28,7 @@ export function createConsole(options: Partial<CreateConsoleOptions> = {}): Cons
     ? {
         ...stdOutJson,
         ...json[1],
-        style: {
-          ...stdOutJson?.style,
-          ...json[1]?.style,
-        },
+        style: mergeStyleOptions(stdOutJson?.style, json[1]?.style),
       }
     : json;
 
