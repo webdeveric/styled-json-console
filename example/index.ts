@@ -2,6 +2,7 @@ import { randomInt } from 'node:crypto';
 import { styleText } from 'node:util';
 
 import { createConsole } from 'styled-json-console';
+import { mergeStyleOptions } from 'styled-json-console/mergeStyleOptions';
 
 const myConsole = createConsole({
   inspectOptions: {
@@ -37,9 +38,9 @@ const myConsole = createConsole({
     // stderr settings are merged with stdout settings so you can override only what you want
     {
       space: 2,
-      style: {
-        string: ['white', 'whiteBright'],
-      },
+      style: mergeStyleOptions(['whiteBright'], {
+        number: ['magentaBright'],
+      }),
     },
   ],
 });
@@ -50,6 +51,7 @@ const data = {
   randomNumber: randomInt(0, 2 ** 32 - 1),
   example: true,
   json: JSON.stringify({ a: 1, b: [2], c: { d: 3, e: [4, 5] } }),
+  nested: { a: 1, b: [2], c: { d: 3, e: [4, 5] } },
 };
 
 myConsole.info(JSON.stringify(data));
