@@ -25,7 +25,7 @@ export default {
           {
             type: 'chore',
             scope: 'spelling',
-            release: 'patch',
+            release: false,
           },
         ],
       },
