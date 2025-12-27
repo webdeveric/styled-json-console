@@ -2,7 +2,7 @@
  * @type {Partial<import('semantic-release').GlobalConfig>}
  */
 export default {
-  branches: ['master'],
+  branches: ['main'],
   preset: 'conventionalcommits',
   plugins: [
     [
