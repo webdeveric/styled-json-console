@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "./example/",
+    "tsBuildInfoFile": "./cache/example.tsbuildinfo"
+  },
+  "include": ["example/**/*"]
+}
