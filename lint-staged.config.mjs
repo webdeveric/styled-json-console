@@ -2,7 +2,7 @@
  * @type {Record<string, string | string[] | ((filenames: string[]) => string | string[] | Promise<string | string[]>)>}
  */
 export default {
-  '*.{js,cjs,mjs,ts,cts,mts}': ['eslint --fix', 'prettier --write'],
+  '*.{js,cjs,mjs,ts,cts,mts}': ['vitest related --run', 'eslint --fix', 'prettier --write'],
   '*.{json,md}': 'prettier --write',
   '*': (files) => {
     return [
