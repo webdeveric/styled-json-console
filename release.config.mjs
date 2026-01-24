@@ -10,7 +10,18 @@ export default {
       {
         releaseRules: [
           {
-            type: 'docs',
+            type: 'chore',
+            scope: 'deps',
+            release: 'minor',
+          },
+          {
+            type: 'chore',
+            scope: 'deps-dev',
+            release: false,
+          },
+          {
+            type: 'chore',
+            scope: 'spelling',
             release: 'patch',
           },
           {
@@ -21,11 +32,6 @@ export default {
           {
             type: 'refactor',
             release: 'patch',
-          },
-          {
-            type: 'chore',
-            scope: 'spelling',
-            release: false,
           },
         ],
       },
