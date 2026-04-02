@@ -9,7 +9,6 @@
     "declaration": true,
     "declarationDir": "./dist/",
     "declarationMap": false,
-    "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
@@ -32,6 +31,7 @@
     "sourceMap": false,
     "strict": true,
     "target": "ES2022",
+    "types": ["node"],
     "verbatimModuleSyntax": true
   },
   "exclude": ["node_modules", "private"]

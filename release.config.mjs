@@ -20,24 +20,33 @@ export default {
             release: false,
           },
           {
-            type: 'chore',
-            scope: 'spelling',
-            release: 'patch',
-          },
-          {
-            type: 'chore',
-            scope: 'docs',
+            type: 'docs',
             release: 'patch',
           },
           {
             type: 'refactor',
             release: 'patch',
           },
+          {
+            type: 'chore',
+            scope: 'spelling',
+            release: 'patch',
+          },
         ],
       },
     ],
     '@semantic-release/release-notes-generator',
-    '@semantic-release/npm',
-    '@semantic-release/github',
+    [
+      '@semantic-release/npm',
+      {
+        provenance: true,
+      },
+    ],
+    [
+      '@semantic-release/github',
+      {
+        addReleases: 'bottom',
+      },
+    ],
   ],
 };
